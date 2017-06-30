@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <iomanip>
 #include <signal.h>
 #include "my_mysql.h"
 
@@ -10,7 +11,7 @@ int main()
 	MySQL m;
 	MYSQL *con;
 	MYSQL_RES *result;
-
+        MYSQL_FIELD *field;
 	
         m.server = "localhost";
 	m.user = "root";
@@ -49,7 +50,7 @@ int main()
 
 
 		char execute = 0;
-		std::cout << query << "\n";		
+		// std::cout << query << "\n";		
 		
 		if(query.compare("ls") == 0)
 		{
@@ -94,27 +95,44 @@ int main()
 		{
 
 			result = m.query(con, query);
-			std::cout << "Query: " << query << "\n";
+			// std::cout << "Query: " << query << "\n";
 			
 
 			if(result != 0)
 			{
-				std::cout << "\nOutput!\n";
-				std::cout << "-----------------------------------------------!\n";
+				// std::cout << "\nOutput!\n";
+				// std::cout << "-----------------------------------------------!\n";
 
-
+                                std::cout << ">\n";
 				int num_fields = mysql_num_fields(result);
 			    	MYSQL_ROW row;
                                 
-			      
+                                std::cout << "+" << std::setfill('-') << std::setw(20)  << "+\n|";
+                                std::cout << std::setfill(' ');
+
+                                // std::cout << "|                             |\n";
+                                // std::cout << "-------------------------------\n";
+
+
+                                while(field = mysql_fetch_field(result))
+                                {
+                                    std::cout << field->name << std::setw(15) << "|";
+                                    
+                                }
+                                std::cout << std::setfill(' ');
+                                std::cout << "\n+" << std::setfill('-') << std::setw(20) << "+\n";
+                                std::cout << std::setfill(' ');
+
 			    	while ((row = mysql_fetch_row(result))) 
 			    	{ 
+                                        //std::cout << std::setfill(' ') << std::setw(10);
 					for(int i = 0; i < num_fields; i++) 
-				  	{ 
-				      		std::cout << row[i]; 
+				  	{
+                                	    std::cout << row[i] << std::setw(20); 
 				  	} 
 					std::cout << "\n"; 
 			    	}
+                               //std::cout << "-------------------------------\n";
 			}
 		}
   
