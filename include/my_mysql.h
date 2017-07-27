@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <string.h>
+#include <iomanip>
 #include <mysql.h>
 
 struct MySQL
@@ -9,6 +10,16 @@ struct MySQL
 	std::string user = "";
 	std::string password = "";
 
-	MYSQL *connect();
-	MYSQL_RES *query(MYSQL *, std::string);
+	char dbflag = 0;
+
+	~MySQL();
+	MYSQL *conn;
+
+	MYSQL *connect_();
+	MYSQL_RES *query_(std::string);
+
+
+        void connect(std::string, std::string, std::string);
+        bool execute(std::string);
+        
 };
